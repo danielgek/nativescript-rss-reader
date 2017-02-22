@@ -1,8 +1,17 @@
-<ActionBar title="Details" class="action-bar"></ActionBar>
-<FlexboxLayout flexDirection="column" class="page">
-    <FlexboxLayout class="m-15">
-        <Label class="h2" [text]="item.id + '. '"></Label>
-        <Label class="h2" [text]="item.name"></Label>
-    </FlexboxLayout>
-    <Label class="h4" [text]="item.role"></Label>
-</FlexboxLayout>
+<ActionBar [title]="article.title" class="action-bar">
+    <NavigationButton text="Back" android:icon="res://ic_arrow_back" (tap)="back()"></NavigationButton>
+</ActionBar>
+<ScrollView>
+    <StackLayout>
+        <Image [src]="article.img"></Image>
+        <StackLayout padding="8">
+            <Label class="title" [text]="article.title" textWrap="true"></Label>
+            <Label class="description" [text]="article.description" textWrap="true"></Label>
+            <Label class="author" text="Author: {{ article.author}}" textWrap="true"></Label>
+            <Button class="read-more" text="Read More"></Button>
+        </StackLayout>
+    </StackLayout>
+</ScrollView>
+       
+    
+

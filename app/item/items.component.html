@@ -1,10 +1,15 @@
-<ActionBar title="My App" class="action-bar">
+<ActionBar title="Rss Reader" class="action-bar">
 </ActionBar>
-<StackLayout class="page">
-    <ListView [items]="items" class="list-group">
-        <template let-item="item">
-            <Label [nsRouterLink]="['/item', item.id]" [text]="item.name"
-                class="list-group-item"></Label>
+<GridLayout>
+    <ListView class="list-group"  [items]="items | async">
+        <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <GridLayout (tap)="goToDetail(item)" [text]="item.name" class="list-group-item" rows="*" columns="auto, *">
+                <StackLayout col="1">
+                    <Label class="list-group-item-heading" [text]="item.title" textWrap="true" ></Label>
+                    <Label class="list-group-item-text" [text]="item.description"></Label>
+                </StackLayout>
+                <Image col="0" [src]="item.img" class="thumb img-rounded" width="92" height="92" verticalAlignment="top"></Image>
+            </GridLayout>
         </template>
     </ListView>
-</StackLayout>
+</GridLayout>

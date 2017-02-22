@@ -2,6 +2,9 @@ import { Component, OnInit } from "@angular/core";
 
 import { Item } from "./item";
 import { ItemService } from "./item.service";
+import { Observable } from 'rxjs/Observable';
+
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({
     selector: "ns-items",
@@ -9,12 +12,22 @@ import { ItemService } from "./item.service";
     templateUrl: "./items.component.html",
 })
 export class ItemsComponent implements OnInit {
-    items: Item[];
+    items: any;
 
-    constructor(private itemService: ItemService) { }
+    constructor(private itemService: ItemService, private routerExtensions: RouterExtensions) { }
 
     ngOnInit(): void {
-        this.items = this.itemService.getItems();
+        this.itemService.getNews()
+            .map(result => result.articles)
+            .subscribe((result) => {
+                console.log('result',result);
+                this.items = result
+            });
+    }
+
+    goToDetail(item) {
+        //console.log(JSON.stringify(item));
+         this.routerExtensions.navigate(["/item", { article: JSON.stringify(item) }]);
     }
     
 }
