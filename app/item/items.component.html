@@ -1,7 +1,7 @@
 <ActionBar title="Rss Reader" class="action-bar">
 </ActionBar>
 <GridLayout>
-    <ListView class="list-group"  [items]="items | async">
+    <ListView class="list-group"  [items]="items">
         <template let-item="item" let-i="index" let-odd="odd" let-even="even">
             <GridLayout (tap)="goToDetail(item)" [text]="item.name" class="list-group-item" rows="*" columns="auto, *">
                 <StackLayout col="1">
