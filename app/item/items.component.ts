@@ -12,12 +12,17 @@ import { RouterExtensions } from "nativescript-angular/router";
     templateUrl: "./items.component.html",
 })
 export class ItemsComponent implements OnInit {
-    items: Observable<any>;
+    items: any;
 
     constructor(private itemService: ItemService, private routerExtensions: RouterExtensions) { }
 
     ngOnInit(): void {
-        this.items = this.itemService.getNews().map(result => result.articles);
+        this.itemService.getNews()
+            .map(result => result.articles)
+            .subscribe((result) => {
+                console.log('result',result);
+                this.items = result
+            });
     }
 
     goToDetail(item) {

@@ -35,8 +35,9 @@ export class ItemService {
 
     getNews(): Observable<rssResult> {
         return this._http.get(`http://feeds.feedburner.com/AndroidPolice?format=xml`)
-            .map((response:Response ) => response.text())
-            .map(response => this.parseXml(response));
+            .map((response:Response ) =>  response.text())
+            .map(response => this.parseXml(response))
+            .catch(this.handleError);
             
     }
 
@@ -61,23 +62,23 @@ export class ItemService {
 
             let content = parse( '<div>' + item.element('description').value + '</div>').root.elements('p')
             content.forEach((itemContent: XElement, index: number) => {
-                if((<string>itemContent.value).charAt(0) === '<' && (<string>itemContent.value).length > 0 && (<string>itemContent.value).charAt((<string>itemContent.value).length-1) === '>'){
-                    try {
-                        let parsedContent = parse( itemContent.value).root;
-                        if(parsedContent && parsedContent.name.equals('img') ){
-                            //console.log('found image')
-                            if(parsedContent.attribute('src') && !hasImage){
-                                imageUrl = parsedContent.attribute('src').value;
-                                hasImage = true;
-                                //console.log(imageUrl);  
-                            }
-                        }    
-                    } catch (error) {
-                       console.log('error on parcing') 
-                       // console.log(itemContent.value); 
+                try {
+                    if((<string>itemContent.value).charAt(0) === '<' && (<string>itemContent.value).length > 0 && (<string>itemContent.value).charAt((<string>itemContent.value).length-1) === '>'){
+                            let parsedContent = parse( itemContent.value).root;
+                            if(parsedContent && parsedContent.name.equals('img') ){
+                                console.log('found image')
+                                if(parsedContent.attribute('src') && !hasImage){
+                                    imageUrl = parsedContent.attribute('src').value;
+                                    hasImage = true;
+                                    console.log(imageUrl);  
+                                }
+                            }    
+                    }else{
+                        description = description + '' + (<string>itemContent.value).replace(/(<([^>]+)>)/, "");
                     }
-                }else{
-                    description = description + '' + (<string>itemContent.value).replace(/(<([^>]+)>)/, "");
+                } catch (error) {
+                    console.log('error on parcing') 
+                    console.log(itemContent.value); 
                 }
             });
             result.articles.push({
